@@ -19,7 +19,10 @@ SOURCE = "earthquake"
 # S3
 ACCESS_KEY = os.getenv("ACCESS_KEY") or Variable.get("access_key", default_var=None)
 SECRET_KEY = os.getenv("SECRET_KEY") or Variable.get("secret_key", default_var=None)
-BUCKET = "prod"
+BUCKET = os.getenv("BUCKET") or "prod"
+
+# DAG settings
+DAG_START_DATE = pendulum.datetime(2026, 3, 15, tz="Europe/Moscow")
 
 LONG_DESCRIPTION = """
 # Raw Earthquake Data Pipeline
@@ -49,7 +52,7 @@ SHORT_DESCRIPTION = "Extract earthquake data from USGS API and load to S3 raw la
 
 args = {
     "owner": OWNER,
-    "start_date": pendulum.datetime(2025, 5, 1, tz="Europe/Moscow"),
+    "start_date": DAG_START_DATE,
     "catchup": True,
     "retries": 3,
     "retry_delay": pendulum.duration(hours=1),
