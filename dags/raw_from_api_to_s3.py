@@ -1,4 +1,5 @@
 import logging
+import os
 
 import duckdb
 import pendulum
@@ -16,8 +17,8 @@ LAYER = "raw"
 SOURCE = "earthquake"
 
 # S3
-ACCESS_KEY = Variable.get("access_key")
-SECRET_KEY = Variable.get("secret_key")
+ACCESS_KEY = os.getenv("ACCESS_KEY") or Variable.get("access_key", default_var=None)
+SECRET_KEY = os.getenv("SECRET_KEY") or Variable.get("secret_key", default_var=None)
 BUCKET = "prod"
 
 LONG_DESCRIPTION = """

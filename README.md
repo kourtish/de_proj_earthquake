@@ -43,6 +43,10 @@ airflow доступен по: localhost:8080
 user: airflow
 password: airflow
 
+Добавим variables через airflow-webserver (которые сохранили в cred.py):
+access_key
+secret_key
+
 minio доступен по: http://localhost:9001/
 user: minioadmin
 password: minioadmin
