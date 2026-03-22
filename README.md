@@ -22,10 +22,15 @@ metabase:
 https://www.metabase.com/docs/latest/installation-and-operation/running-metabase-on-docker
 
 
-# для получения AIRFLOW UID создаем файл .env для текущего пользователя, и теперь мы можем получить доступ к папке с DAGs 
+создаем файл .env c AIRFLOW UID и AIRFLOW_GID
 touch .env
 echo "AIRFLOW_UID=$(id -u)" >> .env && echo "AIRFLOW_GID=$(id -g)" >> .env
 cat .env
+
+Чтобы окружение правильно подсвечивало синтаксис добавим requirements.txt c apache-airflow==2.10.5 (хотя airflow работает в контейнере):
+```
+pip install -r requirements.txt
+```
 
 Разворачивание инфраструктуры:
 
@@ -33,13 +38,17 @@ docker-compose up -d
 
 
 airflow доступен по: localhost:8080
-airflow
-airflow
+user: airflow
+password: airflow
 
 minio доступен по: http://localhost:9001/
-- MINIO_ROOT_USER=minioadmin
-- MINIO_ROOT_PASSWORD=minioadmin
+user: minioadmin
+password: minioadmin
 
 Создайте bucket:
-prod
+prod (Или какой хотите, но затем нужно поменять имя BUCKET в raw_from_api_to_s3.py)
 Создайте и сохраните ключ в cred.py (для безопасности добавлен в .gitignore)
+
+# source video and repo:
+https://www.youtube.com/watch?v=MQPHgUQvKnI&t=2s
+https://github.com/k0rsakov/pet_project_earthquake/tree/main
