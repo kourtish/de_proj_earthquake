@@ -32,6 +32,8 @@ cat .env
 pip install -r requirements.txt
 ```
 
+Нужно будет добавить docherfile для сборки airflow c duckdb
+
 Разворачивание инфраструктуры:
 
 docker-compose up -d
