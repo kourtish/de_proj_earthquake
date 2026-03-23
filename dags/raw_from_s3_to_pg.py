@@ -24,18 +24,34 @@ ACCESS_KEY = os.getenv("ACCESS_KEY") or Variable.get("access_key", default_var=N
 SECRET_KEY = os.getenv("SECRET_KEY") or Variable.get("secret_key", default_var=None)
 BUCKET = os.getenv("BUCKET") or "prod"
 
+# DAG settings
+DAG_START_DATE = pendulum.datetime(2026, 3, 16, tz="Europe/Moscow")
+
 # DuckDB
-PASSWORD = Variable.get("pg_password")
+PASSWORD = os.getenv("PG_PASSWORD") or Variable.get("pg_password")
 
 LONG_DESCRIPTION = """
-# LONG DESCRIPTION
+# Raw From S3 to Postgres Pipeline
+
+This DAG depends on the upstream DAG `raw_from_api_to_s3`, waits for its success, reads raw Parquet data from MinIO S3, and writes it into the ODS Postgres table `fct_earthquake` using DuckDB.
+
+## Process
+
+1. `ExternalTaskSensor` checks for upstream completion.
+2. DuckDB loads S3 parquet file from `s3://{BUCKET}/{LAYER}/{SOURCE}/{date}/`.
+3. Data is mapped and inserted into `dwh_postgres_db.{SCHEMA}.{TARGET_TABLE}`.
+
+## Notes
+
+- The S3 credentials are resolved from `OS_ENV` with fallback to Airflow Variables.
+- The pipeline runs daily at 05:00 Moscow time.
 """
 
-SHORT_DESCRIPTION = "SHORT DESCRIPTION"
+SHORT_DESCRIPTION = "Load raw earthquake data from S3 into Postgres ODS"
 
 args = {
     "owner": OWNER,
-    "start_date": pendulum.datetime(2025, 5, 1, tz="Europe/Moscow"),
+    "start_date": DAG_START_DATE,
     "catchup": True,
     "retries": 3,
     "retry_delay": pendulum.duration(hours=1),
@@ -127,7 +143,7 @@ def get_and_transfer_raw_data_to_ods_pg(**context):
             status,
             locationSource AS location_source,
             magSource AS mag_source
-        FROM 's3://prod/{LAYER}/{SOURCE}/{start_date}/{start_date}_00-00-00.gz.parquet';
+        FROM 's3://{BUCKET}/{LAYER}/{SOURCE}/{start_date}/{start_date}_00-00-00.gz.parquet';
         """,
     )
 
