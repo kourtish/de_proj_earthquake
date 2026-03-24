@@ -20,15 +20,15 @@ SCHEMA = "ods"
 TARGET_TABLE = "fct_earthquake"
 
 # S3
-ACCESS_KEY = os.getenv("ACCESS_KEY") or Variable.get("access_key", default_var=None)
-SECRET_KEY = os.getenv("SECRET_KEY") or Variable.get("secret_key", default_var=None)
-BUCKET = os.getenv("BUCKET") or "prod"
+ACCESS_KEY = Variable.get("access_key", default_var=None)
+SECRET_KEY = Variable.get("secret_key", default_var=None)
+BUCKET = "prod"
 
 # DAG settings
-DAG_START_DATE = pendulum.datetime(2026, 3, 16, tz="Europe/Moscow")
+DAG_START_DATE = pendulum.datetime(2026, 3, 15, tz="Europe/Moscow")
 
 # DuckDB
-PASSWORD = os.getenv("PG_PASSWORD") or Variable.get("pg_password")
+PASSWORD = Variable.get("pg_password")
 
 LONG_DESCRIPTION = """
 # Raw From S3 to Postgres Pipeline

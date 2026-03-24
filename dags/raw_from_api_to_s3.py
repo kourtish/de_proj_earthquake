@@ -17,9 +17,9 @@ LAYER = "raw"
 SOURCE = "earthquake"
 
 # S3
-ACCESS_KEY = os.getenv("ACCESS_KEY") or Variable.get("access_key", default_var=None)
-SECRET_KEY = os.getenv("SECRET_KEY") or Variable.get("secret_key", default_var=None)
-BUCKET = os.getenv("BUCKET") or "prod"
+ACCESS_KEY = Variable.get("access_key", default_var=None)
+SECRET_KEY = Variable.get("secret_key", default_var=None)
+BUCKET = "prod"
 
 # DAG settings
 DAG_START_DATE = pendulum.datetime(2026, 3, 15, tz="Europe/Moscow")
