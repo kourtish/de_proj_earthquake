@@ -2,7 +2,7 @@
 
 **Личный учебный проект** по data engineering: собрать сквозной pipeline от API до витрин и дашборда, в духе lakehouse.
 
-Что внутри: извлечение событий из [USGS FDSNWS Event API](https://earthquake.usgs.gov/fdsnws/event/1/), сырой слой в S3-совместимом MinIO (Parquet), загрузка в PostgreSQL (ODS), агрегаты в DM, визуализация в Metabase. Оркестрация — Apache Airflow 2.10. Это не боевой контур, а песочница для экспериментов и портфолио.
+Что внутри: извлечение событий из [USGS FDSNWS Event API](https://earthquake.usgs.gov/fdsnws/event/1/), сырой слой в S3-совместимом MinIO (Parquet), загрузка в PostgreSQL (ODS), агрегаты в DM, визуализация в Metabase, **уведомления в Telegram при падении тасок Airflow**. Оркестрация — Apache Airflow 2.10. Это не боевой контур, а песочница для экспериментов и портфолио.
 
 ## Содержание
 
@@ -145,8 +145,19 @@ docker compose up -d
 | `access_key` | Ключ доступа MinIO (S3) |
 | `secret_key` | Секретный ключ MinIO |
 | `pg_password` | Пароль пользователя PostgreSQL DWH (`postgres`) |
+| `telegram_bot_token` | (Опционально) токен Telegram-бота для алертов |
+| `telegram_chat_id` | (Опционально) chat id, куда слать алерты |
 
 DAG `raw_from_s3_to_pg` дополнительно может читать `ACCESS_KEY`, `SECRET_KEY`, `BUCKET`, `PG_PASSWORD` из окружения (приоритет над Variables для ключей S3 при установке переменных в контейнере).
+
+### Telegram-алерты (опционально)
+
+В проекте есть callback для уведомлений о падении задач Airflow в Telegram (см. `dags/telegram_alert.py`).
+
+Краткая настройка:
+- создайте бота через `@BotFather` и получите токен;
+- узнайте `chat_id` (например, начните диалог с ботом и возьмите id из `getUpdates`, либо добавьте бота в группу и возьмите id группы);
+- в Airflow UI → Admin → Variables задайте `telegram_bot_token` и `telegram_chat_id`.
 
 ### Подключение к DWH из Airflow (опционально)
 
