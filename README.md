@@ -2,7 +2,7 @@
 
 **Личный учебный проект** по data engineering: собрать сквозной pipeline от API до витрин и дашборда, в духе lakehouse.
 
-Что внутри: извлечение событий из [USGS FDSNWS Event API](https://earthquake.usgs.gov/fdsnws/event/1/), сырой слой в S3-совместимом MinIO (Parquet), загрузка в PostgreSQL (ODS), агрегаты в DM, визуализация в Metabase, **уведомления в Telegram при падении тасок Airflow**. Оркестрация — Apache Airflow 2.10. Это не боевой контур, а песочница для экспериментов и портфолио.
+Что внутри: извлечение событий из [USGS FDSNWS Event API](https://earthquake.usgs.gov/fdsnws/event/1/), сырой слой в S3-совместимом MinIO (Parquet), загрузка в PostgreSQL (ODS), агрегаты в DM, визуализация в Metabase, **уведомления в Telegram при падении тасок Airflow**. Оркестрация — Apache Airflow 2.10.
 
 ## Содержание
 
