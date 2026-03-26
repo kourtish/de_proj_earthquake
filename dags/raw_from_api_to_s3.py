@@ -8,6 +8,8 @@ from airflow.models import Variable
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
 
+from telegram_alert import send_telegram_alert # telegram alert
+
 # Конфигурация DAG
 OWNER = "g.kourtish"
 DAG_ID = "raw_from_api_to_s3"
@@ -56,6 +58,7 @@ args = {
     "catchup": True,
     "retries": 3,
     "retry_delay": pendulum.duration(hours=1),
+    "on_failure_callback": send_telegram_alert,
 }
 
 

@@ -4,6 +4,8 @@ from airflow.operators.empty import EmptyOperator
 from airflow.providers.common.sql.operators.sql import SQLExecuteQueryOperator
 from airflow.sensors.external_task import ExternalTaskSensor
 
+from telegram_alert import send_telegram_alert # telegram alert
+
 # Конфигурация DAG
 OWNER = "g.kourtish"
 DAG_ID = "fct_avg_day_earthquake"
@@ -29,6 +31,7 @@ args = {
     "catchup": True,
     "retries": 3,
     "retry_delay": pendulum.duration(hours=1),
+    "on_failure_callback": send_telegram_alert,
 }
 
 
